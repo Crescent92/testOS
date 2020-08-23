@@ -42,7 +42,7 @@ ISR_ERR   13
 ISR_ERR   14
 ISR_NOERR 15
 ISR_NOERR 16
-ISR_ERR 17
+ISR_NOERR 17
 ISR_NOERR 18
 ISR_NOERR 19
 ISR_NOERR 20
@@ -55,10 +55,14 @@ ISR_NOERR 26
 ISR_NOERR 27
 ISR_NOERR 28
 ISR_NOERR 29
-ISR_ERR 30
+ISR_NOERR 30
 ISR_NOERR 31
+ISR_NOERR 100
+ISR_NOERR 128
 
+global isr_common_stub
 extern isr_handler
+extern irq_handler
 isr_common_stub:
 	pusha		;push edi,esi,ebp,esp,ebx,edx,ecx,eax
 	mov ax, ds
@@ -69,7 +73,9 @@ isr_common_stub:
 	mov fs, ax
 	mov gs, ax
 	
-	call isr_handler
+	push esp
+	call irq_handler
+	add esp, 4
 	
 	pop ebx
 	mov ds, bx
@@ -81,3 +87,13 @@ isr_common_stub:
 	add esp, 8	;Clean up pushed error code and isr number
 	sti
 	iret
+
+global enable_interrupts
+enable_interrupts:
+	sti
+	ret
+
+global clear_interrupts
+clear_interrupts:
+	cli
+	ret	

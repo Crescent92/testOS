@@ -72,17 +72,24 @@ void irq_install() {
 	asm volatile ("sti");
 }
 
+#define IS_IRQ(int_no) ((int_no >= 32) && (int_no <=47))
 void irq_handler(registers_t *r) {
-	if (r->int_no >= 40) {
-		outb(PIC2, PIC_EOI);
+	//printf("Interrupt: %d\n",r->int_no);
+	if(IS_IRQ(r->int_no)) {
+		if (r->int_no >= 40) {
+			outb(PIC2, PIC_EOI);
+		}
+		outb(PIC1, PIC_EOI);
 	}
 
-	outb(PIC1, PIC_EOI);
-
 	if (interrupt_handlers[r->int_no] != 0) {
-		printf("Executing irq_handler\n");
+//		printf("Executing irq_handler\n");
 		isr_t handler = interrupt_handlers[r->int_no];
 		handler(r);
 	}
 
+}
+
+void check() {
+	printf("Check here\n");
 }

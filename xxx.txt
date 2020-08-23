@@ -1,0 +1,9 @@
+bochs -f bochs.config -q
+========================================================================
+                        Bochs x86 Emulator 2.6
+            Built from SVN snapshot on September 2nd, 2012
+========================================================================
+Next at t=0
+(0) [0x00000000fffffff0] f000:fff0 (unk. ctxt): jmp far f000:e05b         ; ea5be000f0
+<bochs:1> (0).[572618000] [0x0000000000101254] 0008:0000000000101254 (unk. ctxt): add dword ptr ss:[ebp-4], 0x00000001 ; 8345fc01
+Makefile:35: recipe for target 'bochs' failed

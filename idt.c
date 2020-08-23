@@ -1,11 +1,49 @@
 #include "idt.h"
 #include "type.h"
 #include "common.h"
+#include "io.h"
 #include "irq.h"
 
 extern void idt_flush();
 idt_entry_t idt_entries[256];
 idt_ptr_t   idt_ptr;
+/*
+extern void irq0();
+extern void irq1();
+extern void irq2();
+extern void irq3();
+extern void irq4();
+extern void irq5();
+extern void irq6();
+extern void irq7();
+extern void irq8();
+extern void irq9();
+extern void irq10();
+extern void irq11();
+extern void irq12();
+extern void irq13();
+extern void irq14();
+extern void irq15();
+*/
+
+extern void isr32();
+extern void isr33();
+extern void isr34();
+extern void isr35();
+extern void isr36();
+extern void isr37();
+extern void isr38();
+extern void isr39();
+extern void isr40();
+extern void isr41();
+extern void isr42();
+extern void isr43();
+extern void isr44();
+extern void isr45();
+extern void isr46();
+extern void isr47();
+
+extern void enable_interrupts();
 
 void idt_set_gate(int num, uint32 base, uint16 sel, uint8 g_type) {
         idt_entries[num].base_low    = (base & 0xffff);
@@ -13,7 +51,7 @@ void idt_set_gate(int num, uint32 base, uint16 sel, uint8 g_type) {
         idt_entries[num].selector    = sel;
         idt_entries[num].gate_type = g_type;
         idt_entries[num].s = 0;
-        idt_entries[num].dpl = 0;
+        idt_entries[num].dpl = 3;
         idt_entries[num].p = 1;
         idt_entries[num].always_zero = 0;
 }

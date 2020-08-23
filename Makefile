@@ -19,17 +19,18 @@ myos.iso: myos.bin
 	grub-mkrescue isodir -o myos.iso
 
 myos.bin: ${OBJS}
-	ld ${LDFLAGS} linker.ld -o myos.bin $^
+	i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib $^ -lgcc
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
 
 %.o: %.s
-	nasm -f elf $< -o $@
+	nasm -gdwarf -f elf $< -o $@
 
+.PHONY: run
 run: myos.iso
 	qemu-system-i386 ${QEMUFLAGS}
-
+.PHONY: bochs
 bochs: myos.iso
 	bochs -f bochs.config -q
 

@@ -1,33 +1,36 @@
 ENTRY(start)
 
-. = 0x00100000;
+SECTIONS
+{
+	. = 1M;
 
-kernel_start = .;
+	/* First put the multiboot header, as it is required to be put very early
+	   early in the image or the bootloader won't recognize the file format.
+	   Next we'll put the .text section. */
+	.text BLOCK(4K) : ALIGN(4K)
+	{
+		*(.multiboot)
+		*(.text)
+	}
 
-SECTIONS{
+	/* Read-only data. */
+	.rodata BLOCK(4K) : ALIGN(4K)
+	{
+		*(.rodata)
+	}
 
-  .boot ALIGN (0x1000):{
-    *(.multiboot_header)
-  }
+	/* Read-write data (initialized) */
+	.data BLOCK(4K) : ALIGN(4K)
+	{
+		*(.data)
+	}
 
-  .text ALIGN (0x1000):{
-    *(.text)
-  }
-
-  .rodata ALIGN (0x1000):{
-    *(.rodaata*)
-  }
-
-  .data ALIGN (0x1000):{
-    *(.data)
-  }
-
-  .bss ALIGN (0x1000):{
-    *(COMMON)
-    *(.bss)
-  }
-
+	/* Read-write data (uninitialized) and stack */
+	.bss BLOCK(4K) : ALIGN(4K)
+	{
+		*(COMMON)
+		*(.bss)
+	}
+	end = .;
+	kend = .; _end = .; __end = .;
 }
-
-end = .;
-

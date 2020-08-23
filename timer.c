@@ -1,19 +1,22 @@
 
 
 #include "timer.h"
+#include "process.h"
 
 
-uint32 tick = 0;
+uint32 time_in_ms_since_boot = 0;
+extern void timer_proc_wait_task_cb();
 
 static void timer_callback(registers_t* regs) {
-	tick++;
-	printf("Tick: %d\n",tick);
+	time_in_ms_since_boot++;
+	timer_proc_wait_task_cb();
+	//printf("Tick: %d int: %d\n",tick,regs->int_no);
 }
 
 
 void init_timer(uint32 freq) {
 	printf("init_timer\n");
-	irq_install_handler(IRQ0, &timer_callback);
+	irq_install_handler(32, &timer_callback);
 
 
 	uint32 divisor = (1193180 / freq);

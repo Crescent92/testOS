@@ -1,23 +1,28 @@
 extern irq_handler
 irq_common:
-	pusha
-	mov ax, ds
-	push eax
-	mov ax, 0x10
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	call irq_handler
-	pop ebx
-	mov ds, bx
-	mov es, bx
-	mov fs, bx
-	mov gs, bx
-	popa 
-	add esp, 8
-	sti
-	iret
+	pusha           ;push edi,esi,ebp,esp,ebx,edx,ecx,eax
+        mov ax, ds
+        push eax
+        mov ax, 0x10    ;kernel data segment to all seg reg
+        mov ds, ax
+        mov es, ax
+        mov fs, ax
+        mov gs, ax
+
+        push esp
+        call irq_handler
+        add esp, 4
+
+        pop ebx
+        mov ds, bx
+        mov es, bx
+        mov fs, bx
+        mov gs, bx
+
+        popa
+        add esp, 8      ;Clean up pushed error code and isr number
+        sti
+        iret
 
 
 %macro IRQ 2
@@ -28,8 +33,6 @@ irq_common:
     push byte %2
     jmp irq_common
 %endmacro
-
-
 
 ; Interrupt Requests
 IRQ 0, 32
