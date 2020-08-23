@@ -33,6 +33,7 @@ void page_fault(registers_t * regs) {
 	printf(") at %x - EIP: %x\n", faulting_address, regs->eip);
 
 	KPANIC("Page fault!");
+	for (;;);
 }
 
 void vmm_initialize() {
