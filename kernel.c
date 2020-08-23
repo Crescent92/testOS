@@ -114,7 +114,7 @@ void kernel_main (struct multiboot *mboot_ptr) {
 	switch_usr_mode();
 	// printf("Back to kernel_main..\n");
 	for(;;) {
-		printf("Hello user mode\n");
+		
 	}
 }
 
