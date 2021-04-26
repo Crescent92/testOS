@@ -6,6 +6,15 @@
         "memory": "cpp",
         "istream": "cpp",
         "new": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "typeinfo": "c",
+        "string_view": "c",
+        "cstdio": "c",
+        "map": "c",
+        "printf.h": "c",
+        "signal_tramp.h": "c",
+        "stdlib.h": "c",
+        "sema.h": "c",
+        "irq.h": "c"
     }
 }
